@@ -1392,7 +1392,7 @@ do {								\
 						(void *)&ucred_cache,
 						(struct inpcb *)args->m);
 					    if (v ==4 /* O_UID */)
-						key = ucred_cache.uid;
+						key = ucred_cache.uid.val;
 					    else if (v == 5 /* O_JAIL */)
 						key = ucred_cache.xid;
 #endif /* !__FreeBSD__ */

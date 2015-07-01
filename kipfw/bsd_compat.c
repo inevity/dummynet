@@ -183,11 +183,11 @@ cred_check(void *_insn,  int proto, struct ifnet *oif,
 		return 0;
 
 	if (insn->o.opcode == O_UID)
-		match = (u->uid == (uid_t)insn->d[0]);
+		match = (u->uid.val == (uid_t)insn->d[0]);
 	else if (insn->o.opcode == O_JAIL)
 		match = (u->xid == (uid_t)insn->d[0]);
 	else if (insn->o.opcode == O_GID)
-		match = (u->gid == (uid_t)insn->d[0]);
+		match = (u->gid.val == (uid_t)insn->d[0]);
 	return match;
 }
 #endif	/* __linux__ */

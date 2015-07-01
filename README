@@ -31,7 +31,8 @@ CREDITS:
 Linux
     INSTALL:
 	# Do the following as root
-	insmod ./dummynet2/ipfw_mod.ko
+#	insmod ./dummynet2/ipfw_mod.ko
+        insmod kipfw-mod/ipfw_mod.ko
 	cp ipfw/ipfw /usr/local/sbin
     REMOVE:
 	rmmod ipfw_mod.ko

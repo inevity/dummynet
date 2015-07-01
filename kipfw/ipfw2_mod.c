@@ -466,7 +466,13 @@ static struct nf_sockopt_ops ipfw_sockopts = {
  * so we have an #ifdef to set the proper argument type.
  */
 static unsigned int
-call_ipfw(unsigned int hooknum,
+call_ipfw(
+#if LINUX_VERSION_CODE > KERNEL_VERSION(3,12,0)
+         const struct nf_hook_ops *ops,
+#else
+	 unsigned int hooknum,
+#endif
+
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,23) // in 2.6.22 we have **
 	struct sk_buff  **skb,
 #else
@@ -475,7 +481,12 @@ call_ipfw(unsigned int hooknum,
 	const struct net_device *in, const struct net_device *out,
 	int (*okfn)(struct sk_buff *))
 {
-	(void)hooknum; (void)skb; (void)in; (void)out; (void)okfn; /* UNUSED */
+#if LINUX_VERSION_CODE > KERNEL_VERSION(3,12,0)
+         (void)ops;
+#else
+	 (void)hooknum;
+#endif
+         (void)skb; (void)in; (void)out; (void)okfn; /* UNUSED */
 	return NF_QUEUE;
 }
 
@@ -742,7 +753,7 @@ linux_lookup(const int proto, const __be32 saddr, const __be16 sport,
 		}
 		read_unlock_bh(&sk->sk_callback_lock);
 	} else {
-		u->uid = u->gid = 0;
+		u->uid.val = u->gid.val = 0;
 	}
 	if (!skb->sk) /* return the reference that came from the lookup */
 		sock_put(sk);
